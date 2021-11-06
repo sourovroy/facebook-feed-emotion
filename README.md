@@ -5,6 +5,7 @@ Find emotions from facebook posts.
 ### Prerequisite
 
 ```bash
+pip install python-dotenv
 pip install falcon
 pip install gunicorn
 ```

@@ -1,4 +1,4 @@
-from app.resources.PredictionResource import PredictionResource
+from app.resources.prediction import PredictionResource
 
 # Register routes
 def register(app):
