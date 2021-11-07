@@ -5,6 +5,12 @@ Find emotions from facebook posts.
 ### Prerequisite
 
 ```bash
+pip install transformers
+pip3 install torch torchvision
+pip install contractions
+pip install nltk
+python3 -m nltk.downloader stopwords
+python3 -m nltk.downloader wordnet
 pip install python-dotenv
 pip install falcon
 pip install gunicorn
