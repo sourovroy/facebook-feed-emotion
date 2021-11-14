@@ -5,6 +5,18 @@ from os import path
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from transformers import RobertaTokenizerFast
+from transformers import TFRobertaModel
+
+'''
+Save roberta base model
+Need to run only once
+'''
+def save_roberta_base_model():
+    dir_path = path.abspath('storage/TFRobertaModel_roberta_base_save_pretrained')
+    roberta_model = TFRobertaModel.from_pretrained('roberta-base')
+    tokenizer.save_pretrained(dir_path);
+save_roberta_base_model()
+exit()
 
 '''
 Save tokenizer model
@@ -16,6 +28,13 @@ def save_tokenizer_model():
     tokenizer.save_pretrained(dir_path);
 # save_tokenizer_model()
 # exit()
+
+# Load saved roberta base model.
+def get_roberta_base_model():
+    dir_path = path.abspath('storage/TFRobertaModel_roberta_base_save_pretrained')
+    return TFRobertaModel.from_pretrained(dir_path, local_files_only=True)
+
+roberta_model = get_roberta_base_model()
 
 # Load saved tokenizer model.
 def get_tokenizer_model():
@@ -40,6 +59,19 @@ def roberta_inference_encode(data, maximum_length):
     attention_masks.append(encoded['attention_mask'])
 
     return np.array(input_ids), np.array(attention_masks)
+
+# Create the final model.
+def create_model(bert_model, max_len):
+    input_ids = tf.keras.Input(shape=(max_len,),dtype='int32')
+    attention_masks = tf.keras.Input(shape=(max_len,),dtype='int32')
+
+    output = bert_model([input_ids,attention_masks])
+    output = output[1]
+
+    output = tf.keras.layers.Dense(6, activation='softmax')(output)
+    model = tf.keras.models.Model(inputs = [input_ids,attention_masks],outputs = output)
+    model.compile(Adam(learning_rate=1e-5), loss='categorical_crossentropy', metrics=['accuracy'])
+    return model
 
 '''
 Removing stopwords (without removing negative words)
