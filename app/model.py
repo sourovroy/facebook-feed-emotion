@@ -52,14 +52,14 @@ def get_roberta_base_model():
     dir_path = path.abspath('storage/TFRobertaModel_roberta_base_save_pretrained')
     return TFRobertaModel.from_pretrained(dir_path, local_files_only=True)
 
-roberta_model = get_roberta_base_model()
+# roberta_model = get_roberta_base_model()
 
 # Load saved tokenizer model.
 def get_tokenizer_model():
     dir_path = path.abspath('storage/RobertaTokenizerFast_roberta_base_save_pretrained')
     return RobertaTokenizerFast.from_pretrained(dir_path, local_files_only=True)
 
-tokenizer = get_tokenizer_model()
+# tokenizer = get_tokenizer_model()
 
 def roberta_inference_encode(data, maximum_length):
     input_ids = []
@@ -113,7 +113,7 @@ def inference(text_sentence, max_len):
 
     input_ids, attention_masks = roberta_inference_encode(preprocessed_text, maximum_length = max_len)
 
-    weights_file_path = path.abspath('storage/RoBERTa_Model_weights-2.h5')
+    weights_file_path = path.abspath('storage/RoBERTa_Model_weights.h5')
 
     model = create_model(roberta_model, max_len)
     model.load_weights(weights_file_path)
@@ -123,8 +123,10 @@ def inference(text_sentence, max_len):
     le_categories = ['anger', 'fear', 'joy', 'love', 'sadness', 'surprise']
     formated = dict( zip(le_categories, [ round(x * 100, 2) for x in result[0] ]) )
     
-    return pd.DataFrame(formated.items(), columns = ['Category', 'Confidence'])
+    # return pd.DataFrame(formated.items(), columns = ['Category', 'Confidence'])
+    return formated
 
+'''
 text_sentence = "I am unhappy";
 #text_sentence = "We are very happy today to complete our first AI prediction.";
 
@@ -133,3 +135,21 @@ max_len = len(text_sentence.split())
 result = inference(text_sentence, max_len);
 
 print(result)
+'''
+
+def predict_texts(texts):
+    global tokenizer, roberta_model
+    tokenizer = get_tokenizer_model()
+    roberta_model = get_roberta_base_model()
+
+    max_len = max( [len(text.split()) for text in texts] )
+
+    results = []
+    for text_sentence in texts:
+        result = inference(text_sentence, max_len);
+        results.append({
+            "text": text_sentence,
+            "result": result
+        })
+
+    return results

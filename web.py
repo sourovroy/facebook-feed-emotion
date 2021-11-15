@@ -9,7 +9,7 @@ from app.middleware import AppMiddleware
 load_dotenv()
 
 # falcon.App instances are callable WSGI apps
-application = falcon.App(middleware=[
+app = application = falcon.App(middleware=[
     AppMiddleware()
 ])
 

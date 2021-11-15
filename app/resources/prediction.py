@@ -1,5 +1,6 @@
 import falcon
 import json
+import app.model as model
 
 class PredictionResource:
 
@@ -8,8 +9,9 @@ class PredictionResource:
         data = json.loads(req.stream.read())
 
         # print(data['texts'])
-
-        result = {"success": True}
+        result = model.predict_texts(data['texts'])
+        
+        # result = {"success": True}
 
         resp.status = falcon.HTTP_OK
         resp.content_type = falcon.MEDIA_JSON
