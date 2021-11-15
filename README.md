@@ -5,6 +5,9 @@ Find emotions from facebook posts.
 ### Prerequisite
 
 ```bash
+python -m pip install -r requirements.txt
+
+pip install tensorflow
 pip install transformers
 pip3 install torch torchvision
 pip install contractions

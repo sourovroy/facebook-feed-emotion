@@ -1,11 +1,20 @@
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+
 import re
+import nltk
 import numpy as np
+import pandas as pd
 import contractions
 from os import path
+import tensorflow as tf
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
+from tensorflow.keras.optimizers import Adam
 from transformers import RobertaTokenizerFast
 from transformers import TFRobertaModel
+
+tf.get_logger().setLevel('ERROR')
 
 '''
 Save roberta base model
@@ -14,9 +23,9 @@ Need to run only once
 def save_roberta_base_model():
     dir_path = path.abspath('storage/TFRobertaModel_roberta_base_save_pretrained')
     roberta_model = TFRobertaModel.from_pretrained('roberta-base')
-    tokenizer.save_pretrained(dir_path);
-save_roberta_base_model()
-exit()
+    roberta_model.save_pretrained(dir_path);
+# save_roberta_base_model()
+# exit()
 
 '''
 Save tokenizer model
@@ -27,6 +36,15 @@ def save_tokenizer_model():
     tokenizer = RobertaTokenizerFast.from_pretrained("roberta-base")
     tokenizer.save_pretrained(dir_path);
 # save_tokenizer_model()
+# exit()
+
+'''
+Download necessary nltk files once
+'''
+def download_necessary_nltk_files():
+    nltk.download('stopwords')
+    nltk.download('wordnet')
+# download_necessary_nltk_files()
 # exit()
 
 # Load saved roberta base model.
@@ -51,8 +69,9 @@ def roberta_inference_encode(data, maximum_length):
         data,
         add_special_tokens=True,
         max_length=maximum_length,
-        pad_to_max_length=True,
-        return_attention_mask=True
+        padding='max_length',
+        return_attention_mask=True,
+        truncation=True
     )
 
     input_ids.append(encoded['input_ids'])
@@ -94,18 +113,20 @@ def inference(text_sentence, max_len):
 
     input_ids, attention_masks = roberta_inference_encode(preprocessed_text, maximum_length = max_len)
 
+    weights_file_path = path.abspath('storage/RoBERTa_Model_weights-2.h5')
+
     model = create_model(roberta_model, max_len)
-    model.load_weights('/content/drive/MyDrive/ColabFiles/Emotion_Detection_Bidirectional_LSTM/RoBERTa_Model_weights.h5')
-
+    model.load_weights(weights_file_path)
+    
     result = model.predict([input_ids, attention_masks])
-
-    #le.categories_[0] = ['anger' 'fear' 'joy' 'love' 'sadness' 'surprise']
-    result = pd.DataFrame(dict(zip(list(le.categories_[0]), [round(x*100, 2)for x in result[0]])).items(), columns = ['Category', 'Confidence'])
-    # plot_result(result)
-
-    return result
+    
+    le_categories = ['anger', 'fear', 'joy', 'love', 'sadness', 'surprise']
+    formated = dict( zip(le_categories, [ round(x * 100, 2) for x in result[0] ]) )
+    
+    return pd.DataFrame(formated.items(), columns = ['Category', 'Confidence'])
 
 text_sentence = "I am unhappy";
+#text_sentence = "We are very happy today to complete our first AI prediction.";
 
 max_len = len(text_sentence.split())
 

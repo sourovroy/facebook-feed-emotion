@@ -11,3 +11,6 @@ __pycache__/
 
 # Environments
 .env
+Lib/
+Scripts/
+pyvenv.cfg
