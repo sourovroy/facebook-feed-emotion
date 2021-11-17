@@ -4,14 +4,19 @@ import falcon
 
 from app import routes
 from app.middleware import AppMiddleware
+from app.middleware import HandleCORS
 
 # take environment variables from .env
 load_dotenv()
 
 # falcon.App instances are callable WSGI apps
-app = application = falcon.App(middleware=[
-    AppMiddleware()
-])
+app = application = falcon.App(
+    cors_enable=True,
+    middleware=[
+        HandleCORS(),
+        AppMiddleware()
+    ],
+)
 
 routes.register(application)
 

@@ -107,6 +107,9 @@ def preprocess(sentence):
 
     return ' '.join([x for x in preprocessed_tokens]).strip()
 
+# Sequance of categories.
+le_categories = ['anger', 'fear', 'joy', 'love', 'sadness', 'surprise']
+
 # Get prediction from a sentence.
 def inference(text_sentence, max_len):
     preprocessed_text = preprocess(text_sentence)
@@ -120,7 +123,6 @@ def inference(text_sentence, max_len):
     
     result = model.predict([input_ids, attention_masks])
     
-    le_categories = ['anger', 'fear', 'joy', 'love', 'sadness', 'surprise']
     formated = dict( zip(le_categories, [ round(x * 100, 2) for x in result[0] ]) )
     
     # return pd.DataFrame(formated.items(), columns = ['Category', 'Confidence'])
@@ -145,11 +147,31 @@ def predict_texts(texts):
     max_len = max( [len(text.split()) for text in texts] )
 
     results = []
+    results_dict = dict.fromkeys(le_categories, 0)
+
     for text_sentence in texts:
+        # if text is empty
+        if not text_sentence.strip():
+            continue
+
         result = inference(text_sentence, max_len);
         results.append({
             "text": text_sentence,
             "result": result
         })
 
-    return results
+        # Add items to a dict
+        for key, value in result.items():
+            results_dict[key] = results_dict[key] + value;
+
+    average_result = {}
+
+    # Find average of all result
+    for key, value in results_dict.items():
+        # removing anger for now.
+        if key == 'anger':
+            continue;
+
+        average_result[ key.capitalize() ] = round((results_dict[key] / len(results)), 2);
+
+    return average_result
