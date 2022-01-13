@@ -10,16 +10,16 @@ import { useSelector } from 'react-redux';
 
 function OutputList() {
   const response = useSelector((state) => state.process.response);
-
+  const averageResult = response.average_result;
   return (
     <Card>
       <CardContent>
-        <Typography variant="h6">
-          Your Average Result
-        </Typography>
+        <Typography variant="h6">Summary:</Typography>
+        <Typography variant="body1" mb={3}>{response.summary}</Typography>
+        <Typography variant="h6">Your Average Result</Typography>
         <List>
-          {Object.keys(response).map((key) => <ListItem>
-            {key}: {response[key]}%
+          {Object.keys(averageResult).map((key) => <ListItem>
+            {key}: {averageResult[key]}%
           </ListItem>)}
         </List>
       </CardContent>

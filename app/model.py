@@ -169,8 +169,8 @@ def predict_texts(texts):
     # Find average of all result
     for key, value in results_dict.items():
         # removing anger for now.
-        if key == 'anger':
-            continue;
+        # if key == 'anger':
+        #    continue;
 
         average_result[ key.capitalize() ] = round((results_dict[key] / len(results)), 2);
 

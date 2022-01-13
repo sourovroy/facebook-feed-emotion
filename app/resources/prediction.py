@@ -1,6 +1,6 @@
 import falcon
 import json
-import app.model as model
+import app.lstm_model as model
 
 class PredictionResource:
 
