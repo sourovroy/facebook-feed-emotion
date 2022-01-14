@@ -5,7 +5,11 @@ import Output from './components/Output';
 import Header from './components/Header';
 import Importer from './components/Importer';
 
+import { useSelector } from 'react-redux';
+
 function App() {
+  const resultPage = useSelector((state) => state.process.resultPage);
+
   return (
     <div className="App">
       <Grid container direction="row" justifyContent="center">
@@ -13,9 +17,7 @@ function App() {
           <Box mt={2} mb={3}>
             <Header />
 
-            <Importer />
-
-            <Output />
+            {resultPage ? <Output /> : <Importer />}
           </Box>
         </Grid>
       </Grid>

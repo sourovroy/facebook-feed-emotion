@@ -90,7 +90,6 @@ def make_summary(average_result):
     else:
         return ""
 
-
 def predict_texts(sentences):
     model = load_model()
     tokenizer = load_tokenizer()

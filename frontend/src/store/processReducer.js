@@ -1,4 +1,17 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import axios from '../axios';
+
+export const startProcessingThunk = createAsyncThunk(
+  'process/startProcessing',
+  async (posts) => {
+    let data = {
+      "texts": posts.map((item) => item.text)
+    };
+
+    return axios.post('/predict-emotion', data).then(res => res.data);
+  }
+);
+
 
 export const processSlice = createSlice({
   name: 'process',
@@ -6,6 +19,7 @@ export const processSlice = createSlice({
   initialState: {
     loading: false,
     response: {},
+    resultPage: false,
   },
 
   reducers: {
@@ -16,10 +30,25 @@ export const processSlice = createSlice({
     setResponse(state, action) {
       state.response = action.payload;
     },
+
+    setResultPage(state, action) {
+      state.resultPage = action.payload;
+    },
+  }, // reducers
+
+  extraReducers(builder) {
+    builder.addCase(startProcessingThunk.fulfilled, (state, action) => {
+      state.response = action.payload;
+      state.loading = false;
+    });
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setLoading, setResponse } = processSlice.actions;
+export const {
+  setLoading,
+  setResponse,
+  setResultPage
+} = processSlice.actions;
 
 export default processSlice.reducer;

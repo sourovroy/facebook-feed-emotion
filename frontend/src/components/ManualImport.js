@@ -10,8 +10,7 @@ import EastIcon from '@mui/icons-material/East';
 import { nanoid } from 'nanoid';
 import { useDispatch } from 'react-redux';
 
-import { setLoading, setResponse } from '../store/processReducer';
-import axios from '../axios';
+import { setLoading, setResultPage, startProcessingThunk } from '../store/processReducer';
 
 /**
  * Individual text field.
@@ -67,16 +66,8 @@ export default function ManualImport() {
   // On click submit button
   const startProcessing = () => {
     dispatch(setLoading(true));
-    let data = {
-      "texts": posts.map((item) => item.text)
-    };
-
-    axios.post('/predict-emotion', data).then((response) => {
-      if (response.data && response.status === 200) {
-        dispatch(setResponse(response.data));
-        dispatch(setLoading(false));
-      }
-    });
+    dispatch(setResultPage(true));
+    dispatch(startProcessingThunk(posts));
   };
 
   return (
