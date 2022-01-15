@@ -73,7 +73,7 @@ function OutputList() {
               <Typography variant="body1" mb={2}>{item.sentence}</Typography>
             </div>)}
 
-            <Typography variant="h6" gutterBottom>Result:</Typography>
+            <Typography variant="h6" gutterBottom>Summary Result:</Typography>
             <Alert icon={false} severity="info">{response.summary}</Alert>
           </Grid>
 

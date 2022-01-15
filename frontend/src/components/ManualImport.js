@@ -67,7 +67,7 @@ export default function ManualImport() {
   const startProcessing = () => {
     dispatch(setLoading(true));
     dispatch(setResultPage(true));
-    dispatch(startProcessingThunk(posts));
+    dispatch(startProcessingThunk(posts.map((item) => item.text)));
   };
 
   return (

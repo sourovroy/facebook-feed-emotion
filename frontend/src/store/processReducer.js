@@ -4,14 +4,9 @@ import axios from '../axios';
 export const startProcessingThunk = createAsyncThunk(
   'process/startProcessing',
   async (posts) => {
-    let data = {
-      "texts": posts.map((item) => item.text)
-    };
-
-    return axios.post('/predict-emotion', data).then(res => res.data);
+    return axios.post('/predict-emotion', {texts: posts}).then(res => res.data);
   }
 );
-
 
 export const processSlice = createSlice({
   name: 'process',
