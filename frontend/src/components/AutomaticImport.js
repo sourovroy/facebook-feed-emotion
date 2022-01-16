@@ -53,6 +53,7 @@ export default function AutomaticImport() {
         display: 'flex',
         justifyContent: 'center',
       }}
+      mb={16}
     >
       <Card sx={{ maxWidth: 500 }}>
         <CardContent>
