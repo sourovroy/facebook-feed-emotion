@@ -1,12 +1,11 @@
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-
-import Output from './components/Output';
-import Header from './components/Header';
-import Importer from './components/Importer';
-
 import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useRoutes } from "react-router-dom";
+
+import Header from './components/Header';
+import Footer from './components/Footer';
+import routes from './routes';
 
 /**
  * Add script tag for Facebook
@@ -32,25 +31,26 @@ function loadFacebookSDK() {
 }
 
 function App() {
-  const resultPage = useSelector((state) => state.process.resultPage);
-
   // Add Facebook SDK.
   useEffect(() => {
     loadFacebookSDK();
   }, []);
 
+  let elements = useRoutes(routes);
+
   return (
-    <div className="App">
+    <>
       <Grid container direction="row" justifyContent="center">
         <Grid item xs={8}>
-          <Box mt={2} mb={3}>
+          <Box mt={2}>
             <Header />
-
-            {resultPage ? <Output /> : <Importer />}
+            {elements}
           </Box>
         </Grid>
       </Grid>
-    </div>
+
+      <Footer />
+    </>
   );
 }
 
