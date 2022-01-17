@@ -26,7 +26,7 @@ export default function AutomaticImport() {
   const getPosts = (userID) => {
     FB.api( // eslint-disable-line no-undef
       `/${userID}/posts`,
-      {include_hidden: true, limit: 15},
+      {include_hidden: true, limit: 10},
       function(response) {
         if (response && 0 < response.data.length) {
           sendToProcess(response.data);
