@@ -27,7 +27,7 @@ class AppMiddleware:
         if (getenv('APP_SECRET_ID') != app_id):
             raise AppSecretError()
 
-# Middleware for handle CORS
+# Middleware for handle Cross-Origin Resource Sharing
 class HandleCORS:
     def process_request(self, req, resp):
         resp.set_header('Access-Control-Allow-Origin', '*')

@@ -29,29 +29,7 @@ def clean(text):
     text = re.sub(r'[^a-zA-Z ]', '', text)
     text = text.lower()
     return text
-'''
-sentences = [
-            "He's over the moon about being accepted to the university",
-            "Your point on this certain matter made me outrageous, how can you say so? This is insane.",
-            "I can't do it, I'm not ready to lose anything, just leave me alone",
-            "Merlin's beard harry, you can cast the Patronus charm! I'm amazed!"
-            ]
-for sentence in sentences:
-    print(sentence)
-    sentence = clean(sentence)
-    sentence = tokenizer.texts_to_sequences([sentence])
-    sentence = pad_sequences(sentence, maxlen=256, truncating='pre')
 
-    predictData = model.predict(sentence);
-
-    result = le.inverse_transform(np.argmax(predictData, axis=-1))[0]
-
-    # for val in predictData[0]:
-    #  print(f"{val}")
-
-    proba =  np.max(predictData)
-    print(f"{result} : {proba}\n\n")
-'''
 
 def make_summary(average_result):
     max_key, max_value = max(average_result.items(), key = lambda k : k[1])

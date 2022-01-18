@@ -10,8 +10,6 @@ import theme from './theme';
 
 import App from './App';
 
-import './index.css';
-
 ReactDOM.render(
   <Provider store={store}>
     <ThemeProvider theme={theme}>
