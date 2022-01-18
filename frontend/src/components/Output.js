@@ -67,24 +67,26 @@ function OutputList() {
       <CardContent>
 
         <Grid container>
-          <Grid item xs={6}>
+          <Grid item xs={12} sm={6}>
             {itemsResult.map((item, index) => <div key={nanoid()}>
               <Typography variant="h6"><strong>Facebook post - {index + 1}:</strong></Typography>
               <Typography variant="body1" mb={2}>{item.sentence}</Typography>
             </div>)}
 
             <Typography variant="h6" gutterBottom>Summary Result:</Typography>
-            <Alert icon={false} severity="info">{response.summary}</Alert>
+            <Box mb={2}>
+              <Alert icon={false} severity="info">{response.summary}</Alert>
+            </Box>
           </Grid>
 
-          <Grid item xs={1}></Grid>
-          <Grid item xs={5}>
+          <Grid item sm={1}></Grid>
+          <Grid item xs={12} sm={5}>
             <Typography variant="h6" mb={2} align="center">Statistical Report</Typography>
             <Doughnut options={pieOptions} data={pieData} />
           </Grid>
         </Grid>
 
-        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'center' }} pt={3}>
           <Button variant="contained" color="primary" onClick={onGoBack}>Go Back</Button>
         </Box>
       </CardContent>
