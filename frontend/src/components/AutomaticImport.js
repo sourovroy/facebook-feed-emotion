@@ -3,12 +3,16 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import LoadingButton from '@mui/lab/LoadingButton';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { setLoading, setResultPage, startProcessingThunk } from '../store/processReducer';
 
 export default function AutomaticImport() {
   const dispatch = useDispatch();
+  const [loadingButton, setButtonLoading] = useState(false);
 
   const sendToProcess = (data) => {
     let items = [];
@@ -28,6 +32,8 @@ export default function AutomaticImport() {
       `/${userID}/posts`,
       {include_hidden: true, limit: 10},
       function(response) {
+        setButtonLoading(false);
+        console.log("Total", response.data.length, "posts found.");
         if (response && 0 < response.data.length) {
           sendToProcess(response.data);
         } else {
@@ -38,10 +44,13 @@ export default function AutomaticImport() {
   };
 
   const onClickAuthorize = () => {
+    setButtonLoading(true);
     FB.login(function(response) { // eslint-disable-line no-undef
       if (response.authResponse) {
+        console.log('User logged in. Fetching user posts.');
         getPosts(response.authResponse.userID);
       } else {
+        setButtonLoading(false);
         console.log('User cancelled login or did not fully authorize.');
       }
     }, {scope: 'user_posts'});
@@ -71,7 +80,14 @@ export default function AutomaticImport() {
             }}
             mt={3}
           >
-            <Button variant="contained" color="primary" onClick={onClickAuthorize}>Authorize</Button>
+            <LoadingButton
+              variant="contained"
+              color="primary"
+              onClick={onClickAuthorize}
+              startIcon={<FacebookIcon />}
+              loading={loadingButton}
+              loadingPosition="start"
+            >Authorize</LoadingButton>
           </Box>
         </CardContent>
       </Card>
